@@ -1,4 +1,4 @@
 public interface Savable {
-    void saveForLater(User user);
-    void unsave(User user);
+    void saveForLater(People user);
+    void unsave(People user);
 }
