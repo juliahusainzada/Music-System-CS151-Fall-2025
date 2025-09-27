@@ -1,6 +1,10 @@
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Abstract base class for Song and Podcast
+ * Implements common behavior like playback, saving/unsaving, and searching
+ */
 public abstract class MediaItem implements Playable, Savable, Searchable {
     protected final String itemId;
     protected String title;
@@ -38,6 +42,7 @@ public abstract class MediaItem implements Playable, Savable, Searchable {
         return savedByUserIds;
     }
 
+    // Playable interface implementation
     @Override
     public void play() {
         state = PlaybackState.PLAYING;
@@ -53,8 +58,45 @@ public abstract class MediaItem implements Playable, Savable, Searchable {
         state = PlaybackState.STOPPED;
     }
 
-    // TODO: Savable defaults
+    // Savable interface implementation
+    @Override
+    public void saveForLater(People user) {
+        if (user != null) {
+            savedByUserIds.add(user.getPersonId());
+        }
+    }
 
-    // TODO: Searchable default
+    @Override
+    public void unsave(People user) {
+        if (user != null) {
+            savedByUserIds.remove(user.getPersonId());
+        }
+    }
 
+    public interface Savable {
+        void saveForLater(People user);
+        void unsave(People user);
+    }
+
+    /**
+     * Determines if MediaItem matches a given search query
+     * @return true if the query matches the title or ownerArtistID, false otherwise
+     * Will be used by another class to filter collections of MediaItem objects
+     */
+    @Override
+    public boolean matches(String query) {
+        if (query == null || query.isEmpty()) {
+            return false;
+        }
+        String q = query.toLowerCase();
+
+        // check if title exists and contains query
+        boolean titleMatches = (title != null) && title.toLowerCase().contains(q);
+
+        // check if artist id exists and contains query
+        boolean artistMatches = (ownerArtistID != null) & ownerArtistID.toLowerCase().contains(q);
+        
+        // return true if either the title OR artist matches
+        return titleMatches || artistMatches;
+    }
 }
