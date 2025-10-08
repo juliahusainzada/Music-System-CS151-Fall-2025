@@ -60,22 +60,22 @@ public abstract class MediaItem implements Playable, Savable, Searchable {
 
     // Savable interface implementation
     @Override
-    public void saveForLater(People user) {
+    public void saveForLater(User user) {
         if (user != null) {
-            savedByUserIds.add(user.getPersonId());
+            savedByUserIds.add(user.getUserId());
         }
     }
 
     @Override
-    public void unsave(People user) {
+    public void unsave(User user) {
         if (user != null) {
-            savedByUserIds.remove(user.getPersonId());
+            savedByUserIds.remove(user.getUserId());
         }
     }
 
     public interface Savable {
-        void saveForLater(People user);
-        void unsave(People user);
+        void saveForLater(User user);
+        void unsave(User user);
     }
 
     /**
