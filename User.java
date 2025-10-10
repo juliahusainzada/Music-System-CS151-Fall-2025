@@ -1,16 +1,16 @@
-abstract class People {
-    protected String personId;
+abstract class User {
+    protected String userId;
     protected String displayName;
     protected String phoneNumber;
 
-    public People(String personId, String displayName, String phoneNumber) {
-        this.personId = personId;
+    public User(String userId, String displayName, String phoneNumber) {
+        this.userId = userId;
         this.displayName = displayName;
         this.phoneNumber = phoneNumber;
     }
 
-    public String getPersonId() {
-        return personId;
+    public String getUserId() {
+        return userId;
     }
 
     public String getDisplayName() {
@@ -21,7 +21,3 @@ abstract class People {
         return phoneNumber;
     }
 }
-
-
-
-
