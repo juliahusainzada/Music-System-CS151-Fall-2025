@@ -106,6 +106,7 @@ public class MusicSystemCLI {
         System.out.println("9. Logout");   
     }
 
+    // Menu handling when no session
     private boolean handleMainMenu(int choice) {
         switch (choice) {
             case 1:
