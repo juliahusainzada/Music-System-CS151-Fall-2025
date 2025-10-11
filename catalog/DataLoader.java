@@ -23,7 +23,6 @@ public class DataLoader {
 
                 auth.addPreloadedArtist(accountId, password, userId, displayName, stageName);
             }
-            System.out.println("✅ Artists loaded successfully!");
         } catch (IOException e) {
             System.out.println("Error loading artists: " + e.getMessage());
         }
@@ -51,7 +50,6 @@ public class DataLoader {
                     artist.getOwnedItemIds().add(songId);
                 }
             }
-            System.out.println("✅ Songs loaded successfully!");
         } catch (IOException e) {
             System.out.println("Error loading songs: " + e.getMessage());
         }
@@ -70,7 +68,6 @@ public class DataLoader {
 
                 auth.addPreloadedListener(accountId, password, userId, displayName);
             }
-            System.out.println("✅ Listeners loaded successfully!");
         } catch (IOException e) {
             System.out.println("Error loading listeners: " + e.getMessage());
         }

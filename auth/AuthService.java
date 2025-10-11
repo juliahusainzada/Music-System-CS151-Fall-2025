@@ -8,103 +8,102 @@ import user.Artist;
 import user.Listener;
 import user.Role;
 
+/**
+ * Handles all user account operations
+ * Registering users, login/logout, managing session
+ * Gives access to user profiles
+ */
 public class AuthService {
+    // Stores registered accounts by accountId
     private final Map<String, Account> accounts = new HashMap<>();
+    
+    // Stores currently logged-in sessions by sessionId
     private final Map<String, Session> sessions = new HashMap<>();
 
+    // Each store registered users by userId
     private final Map<String, Listener> listeners = new HashMap<>();
     private final Map<String, Artist> artists = new HashMap<>();
     
-    /**
-     * - Creates unique userId ✓
-        - Creates Listener object and stores it ✓
-        - Creates Account linking to that Listener ✓
-        - Auto-creates Session for immediate login ✓
-        - Returns the session
-     */
     public Session registerListener(String accountId, String password, String displayName) {
+        // Check if username already taken
         if (accounts.containsKey(accountId)) {
-            return null; // username is taken!
+            return null;
         }
 
-        // Create Listener object
+        // Create Listener object, generate unique userId, save to listeners
         String userId = "u" + UUID.randomUUID().toString().substring(0, 8);
         Listener listener = new Listener(userId, displayName);
         listeners.put(userId, listener);
 
-        // Create Account
+        // Create Account linking to userId
         Account account = new Account(accountId, password, Role.LISTENER, userId);
         accounts.put(accountId, account);
 
-        // auto login creates a new session
+        // Create new session
         Session session = new Session(accountId, Role.LISTENER, userId);
         sessions.put(session.getSessionId(), session);
-
+    
         return session;
     }
 
     public Session registerArtist(String accountId, String password, String displayName, String stageName) {
+        // Check if username already taken
         if (accounts.containsKey(accountId)) {
-            return null; // username is taken!
+            return null;
         }
 
-        // Create Artist object
+        // Create Listener object, generate unique userId, save to artists
         String userId = "a" + UUID.randomUUID().toString().substring(0, 8);
         Artist artist = new Artist(userId, displayName, stageName);
         artists.put(userId, artist);
 
-        // Create Account
+        // Create Account linking to userId
         Account account = new Account(accountId, password, Role.ARTIST, userId);
         accounts.put(accountId, account);
 
-        // auto login creates a new session
+        // Create new session
         Session session = new Session(accountId, Role.ARTIST, userId);
         sessions.put(session.getSessionId(), session);
 
         return session;
     }
 
-    /**
-     * - Finds the account ✓
-     * Checks if account exists ✓
-     * Verifies password matches ✓
-     * Creates new session ✓
-     * Stores and returns session ✓
-     */
     public Session login(String accountId, String password) {
-        // First, find account
         Account account = accounts.get(accountId);
-
+        
+        // Check if account exists
         if (account == null) {
             return null; // acc doesnt exist
         }
 
-        // Second, verify pass
+        // Verify password
         if (!account.getPassword().equals(password)) {
-            return null; // wrong pass
+            return null;
         }
 
-        // Third, create new session
+        // Create new session
         Session session = new Session(account.getAccountId(), account.getRole(), account.getLinkedId());
-
-        // return session
         sessions.put(session.getSessionId(), session);
+        
         return session;
     }
 
     public boolean logout(String sessionId) {
         Session session = sessions.get(sessionId);
+
+        // Check if session doesnt exist or user already logged out 
         if (session == null || !session.isActive()) {
-            return false; // session doesnt exist or already logged out 
+            return false; 
         }
         session.deactivate();
         return true;
     }
 
+    // Given session ID, return currently logged-in user object
     public Object getUserBySession(String sessionId) {
         Session session = sessions.get(sessionId);
         if (session == null || !session.isActive()) {
-            return null; //invalid session
+            return null; // Invalid session ex. user not logged in
         }
 
         if (session.getRole() == Role.ARTIST) {
