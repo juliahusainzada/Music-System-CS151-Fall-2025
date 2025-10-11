@@ -7,30 +7,31 @@ import java.util.Set;
 import domain.MediaItem;
 import domain.Song;
 
+/**
+ * Each library belongs to one user
+ * Tracks what Listener saved
+ */
 public class Library {
-    // Each library belongs to one user
     private final String ownerId;
-    // Each library only tracks what that person has saved
-    // Set: no duplicates
-    // LinkedHashSet: order is remembered in which added
+    // Set: No duplicates
+    // LinkedHashSet: Order is remembered in which added
     private final Set<String> savedItemIds = new LinkedHashSet<>();
 
     public Library(String ownerId) {
         this.ownerId = ownerId;
     }
 
-    // adds ID to users saved set
+    // Add media ID to saved set
     public void save(String itemId) {
         savedItemIds.add(itemId);
     }
 
-    // removed ID from users saved set
+    // Remove media from saved set
     public void unsave(String itemId) {
         savedItemIds.remove(itemId);
     }
-    // Displaying
 
-    // Return only saved songs
+    // Return saved songs
     public List<Song> listSavedSongs(Catalog catalog) {
         List<Song> out = new ArrayList<>();
         for (String id: savedItemIds) {
@@ -42,8 +43,7 @@ public class Library {
         return out;
     }
 
-    // library must tell us if something already saved
-    // This lets the listener decide whether to show Save or Unsave after a search.
+    // Helps with save or unsaving items
     public boolean isSaved(String itemId) {
         return savedItemIds.contains(itemId);
     }
