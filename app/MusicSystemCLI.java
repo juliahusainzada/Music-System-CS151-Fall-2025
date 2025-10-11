@@ -17,8 +17,14 @@ public class MusicSystemCLI {
     private AuthService auth;
     private Catalog catalog;
     private Scanner scanner;
-    private Session currentSession; //track who is logged in
+    private Session currentSession;
 
+    /*
+     * Auth: Start the login system
+     * Catalog: Connect to shared library of content
+     * Scanner: Read user input
+     * CurrentSession: Who is logged in to determine UI
+     */
     public MusicSystemCLI() {
         this.auth = new AuthService();
         this.catalog = Catalog.getInstance();
@@ -32,9 +38,11 @@ public class MusicSystemCLI {
         DataLoader.loadListeners(base + "listeners.csv", auth);
     }
 
+    /*
+     * Runs different UI's based on user input and role
+     */
     public void run() {
-        System.out.println("🎵 Welcome to the Music System! 🎵\\n");
-
+        System.out.println("🎵 Welcome to the Music System! 🎵\n");
         boolean running = true;
 
         while (running) {
@@ -60,6 +68,7 @@ public class MusicSystemCLI {
         scanner.close();
     }
 
+    // Menu when no user is logged in 
     private void showMainMenu() {
         System.out.println("\n===== MAIN MENU =====");
         System.out.println("1. Register as Artist");
@@ -68,6 +77,7 @@ public class MusicSystemCLI {
         System.out.println("4. Exit");
     }
 
+    // Menu when user role is Artist
     private void showArtistMenu() {
         System.out.println("\n===== ARTIST MENU =====");
         System.out.println("1. Publish Song");
@@ -76,6 +86,7 @@ public class MusicSystemCLI {
         System.out.println("4. Logout");
     }
 
+    // Menu when user role is Listener 
     private void showListenerMenu(Listener listener) {
         System.out.println("\n===== LISTENER MENU =====");
         System.out.println("1. Search Songs");
@@ -83,9 +94,11 @@ public class MusicSystemCLI {
         System.out.println("3. Unsave Song");
         System.out.println("4. View Saved Songs");
         System.out.println("5. Play Song");
+        // Can only pause music if a song is playing
         if (listener.isPlaying()) {
             System.out.println("6. Pause");
         }
+        // Can only stop a song if song is paused or playing
         if (listener.isPlaying() || listener.isPaused()) {
             System.out.println("7. Stop");
         }
@@ -105,13 +118,15 @@ public class MusicSystemCLI {
                 login();
                 return true;
             case 4:
-                return false; // exit
+                // Exit
+                return false;
             default:
                 System.out.println("Invalid choice!");
                 return true;
         }
     }
 
+    // Case 1 - handleMainMenu
     private void registerArtist() {
         System.out.println("\n--- Register as Artist ---");
         String accountId = getStringInput("Username: ");
@@ -128,6 +143,7 @@ public class MusicSystemCLI {
         }
     }
 
+    // Case 2 - handleMainMenu
     private void registerListener() {
         System.out.println("\n--- Register as Listener ---");
         String accountId = getStringInput("Username: ");
@@ -143,6 +159,7 @@ public class MusicSystemCLI {
         }
     }
 
+    // Case 3 - handleMainMenu
     private void login() {
         System.out.println("\n--- Login ---");
         String accountId = getStringInput("Username: ");
@@ -157,6 +174,7 @@ public class MusicSystemCLI {
         }
     }
 
+    // Menu handling when user role is Artist
     private boolean handleArtistMenu(int choice) {
         Artist artist = (Artist) auth.getUserBySession(currentSession.getSessionId());
 
@@ -179,6 +197,7 @@ public class MusicSystemCLI {
         }
     }
 
+    // Case 1 - handleArtistMenu
     public void publishSong(Artist artist) {
         System.out.println("\n--- Publish Song ---");
         String title = getStringInput("Title: ");
@@ -190,6 +209,7 @@ public class MusicSystemCLI {
         System.out.println("✓ Song published successfully!");
     }
 
+    // Case 2 - handleArtistMenu
     private void viewMySongs(Artist artist) {
         System.out.println("\n--- My Published Songs ---");
         if (artist.getOwnedItemIds().isEmpty()) {
@@ -203,6 +223,7 @@ public class MusicSystemCLI {
         }
     }
 
+    // Case 3 - handleArtistMenu
     public void removeSong(Artist artist) {
         System.out.println("\n--- Remove Song ---");
         viewMySongs(artist);
@@ -236,12 +257,13 @@ public class MusicSystemCLI {
         System.out.println("✗ Song not found!");
     }
 
+    // Case 4 - handleArtistMenu
     private void logout(){
         auth.logout(currentSession.getSessionId());
         currentSession = null;
         System.out.println("✓ Logged out successfully!");
     }
-
+    // Menu handling when user role is Listener
     private boolean handleListenerMenu(int choice) {
         Listener listener = (Listener) auth.getUserBySession(currentSession.getSessionId());
 
@@ -291,6 +313,7 @@ public class MusicSystemCLI {
         }
     }
 
+    // Case 1 - handleListenerMenu
     private void searchSongs() {
         System.out.println("\n--- Search Songs ---");
         String query = getStringInput("Search: ");
@@ -307,6 +330,7 @@ public class MusicSystemCLI {
         }
     }
 
+    // Case 2 - handleListenerMenu
     private void saveSong(Listener listener) {
         String title = getStringInput("Enter song title to save: ");
         String itemId = listener.saveByExactTitle(catalog, title);
@@ -318,6 +342,21 @@ public class MusicSystemCLI {
         }
     }
 
+    // Case 3 - handleListenerMenu
+    private void unsaveSong(Listener listener) {
+        System.out.println("\n--- Unsave Song ---");
+
+        String title = getStringInput("Enter song title to unsave: ");
+
+        String itemId = listener.unsaveByExactTitle(catalog, title);
+        if (itemId != null) {
+            System.out.println("✓ Song removed from your library!");
+        } else {
+            System.out.println("✗ Song not found!");
+        }
+    }
+
+    // Case 4 - handleListenerMenu
     private void viewSavedSongs(Listener listener) {
         System.out.println("\n--- Your Saved Songs ---");
 
@@ -333,19 +372,7 @@ public class MusicSystemCLI {
         }
     }
 
-    private void unsaveSong(Listener listener) {
-        System.out.println("\n--- Unsave Song ---");
-
-        String title = getStringInput("Enter song title to unsave: ");
-
-        String itemId = listener.unsaveByExactTitle(catalog, title);
-        if (itemId != null) {
-            System.out.println("✓ Song removed from your library!");
-        } else {
-            System.out.println("✗ Song not found!");
-        }
-    }
-
+    // Case 5 - handleListenerMenu
     private void playSong(Listener listener) {
         String title = getStringInput("Enter song title to play: ");
         boolean success = listener.playByExactTitle(catalog, title);
@@ -356,11 +383,13 @@ public class MusicSystemCLI {
         }
     }
 
+    // Helper function for searching, saving, unsaving media
     private String getStringInput(String prompt) {
         System.out.print(prompt);
         return scanner.nextLine().trim();
     }
 
+    // Helper function for UI handling
     private int getIntInput(String prompt) {
         while (true) {
             try {
