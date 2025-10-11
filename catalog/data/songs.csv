@@ -1,0 +1,16 @@
+songId,title,durationSec,ownerArtistId,album,genre
+s1001,Hotline Bling,267,a1001,Views,Hip Hop
+s1002,God's Plan,198,a1001,Scorpion,Hip Hop
+s1003,One Dance,173,a1001,Views,Hip Hop
+s1004,Shake It Off,219,a1002,1989,Pop
+s1005,Blank Space,231,a1002,1989,Pop
+s1006,Anti-Hero,200,a1002,Midnights,Pop
+s1007,Blinding Lights,200,a1003,After Hours,Pop
+s1008,Starboy,230,a1003,Starboy,R&B
+s1009,Save Your Tears,215,a1003,After Hours,Pop
+s1010,Halo,261,a1004,I Am... Sasha Fierce,R&B
+s1011,Crazy in Love,236,a1004,Dangerously in Love,R&B
+s1012,Formation,206,a1004,Lemonade,R&B
+s1013,Lose Yourself,326,a1005,8 Mile,Hip Hop
+s1014,Stan,404,a1005,The Marshall Mathers LP,Hip Hop
+s1015,Without Me,290,a1005,The Eminem Show,Hip Hop
