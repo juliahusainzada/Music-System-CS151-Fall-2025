@@ -141,7 +141,7 @@ public class MusicSystemCLI {
         if (currentSession != null) {
             printSuccess("✓ Registration successful! Welcome, " + displayName + "!");
         } else {
-            printError("✗ Registration failed! Check that all fields are filled and username is not taken.");
+            printError("✗ Registration failed! " + auth.getLastError());
         }
     }
 
@@ -157,7 +157,7 @@ public class MusicSystemCLI {
         if (currentSession != null) {
             printSuccess("✓ Registration successful! Welcome, " + displayName + "!");
         } else {
-            printError("✗ Registration failed! Check that all fields are filled and username is not taken.");
+            printError("✗ Registration failed! " + auth.getLastError());
         }
     }
 

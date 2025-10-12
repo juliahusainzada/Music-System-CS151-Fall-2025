@@ -24,16 +24,23 @@ public class AuthService {
     private final Map<String, Listener> listeners = new HashMap<>();
     private final Map<String, Artist> artists = new HashMap<>();
     
+    // Stores the last error message from failed operations
+    private String lastError = null;
+    
     public Session registerListener(String accountId, String password, String displayName) {
+        lastError = null; // Clear previous error
+        
         // Validate input - reject empty fields
         if (accountId == null || accountId.trim().isEmpty() ||
             password == null || password.trim().isEmpty() ||
             displayName == null || displayName.trim().isEmpty()) {
+            lastError = "All fields must be filled out!";
             return null;
         }
         
         // Check if username already taken
         if (accounts.containsKey(accountId)) {
+            lastError = "Username '" + accountId + "' is already taken!";
             return null;
         }
 
@@ -54,16 +61,20 @@ public class AuthService {
     }
 
     public Session registerArtist(String accountId, String password, String displayName, String stageName) {
+        lastError = null;
+        
         // Validate input - reject empty fields
         if (accountId == null || accountId.trim().isEmpty() ||
             password == null || password.trim().isEmpty() ||
             displayName == null || displayName.trim().isEmpty() ||
             stageName == null || stageName.trim().isEmpty()) {
+            lastError = "All fields must be filled out!";
             return null;
         }
         
         // Check if username already taken
         if (accounts.containsKey(accountId)) {
+            lastError = "Username '" + accountId + "' is already taken!";
             return null;
         }
 
@@ -134,6 +145,13 @@ public class AuthService {
         }
     }
 
+    /**
+     * Get the last error message from a failed operation
+     */
+    public String getLastError() {
+        return lastError;
+    }
+    
     /**
      * Helper method for loading pre-existing artists from CSV files
      * Does not create a session or auto-generate userId
