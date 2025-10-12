@@ -24,23 +24,19 @@ public class AuthService {
     private final Map<String, Listener> listeners = new HashMap<>();
     private final Map<String, Artist> artists = new HashMap<>();
     
-    // Stores the last error message from failed operations
-    private String lastError = null;
-    
     public Session registerListener(String accountId, String password, String displayName) {
-        lastError = null; // Clear previous error
-        
         // Validate input - reject empty fields
         if (accountId == null || accountId.trim().isEmpty() ||
             password == null || password.trim().isEmpty() ||
             displayName == null || displayName.trim().isEmpty()) {
-            lastError = "All fields must be filled out!";
             return null;
         }
-        
+
+        // Normalize username to lowercase for case-insensitive comparison
+        accountId = accountId.toLowerCase();
+
         // Check if username already taken
         if (accounts.containsKey(accountId)) {
-            lastError = "Username '" + accountId + "' is already taken!";
             return null;
         }
 
@@ -60,21 +56,21 @@ public class AuthService {
         return session;
     }
 
-    public Session registerArtist(String accountId, String password, String displayName, String stageName) {
-        lastError = null;
-        
+    public Session registerArtist(String accountId, String password, String displayName, String stageName) {        
         // Validate input - reject empty fields
         if (accountId == null || accountId.trim().isEmpty() ||
             password == null || password.trim().isEmpty() ||
             displayName == null || displayName.trim().isEmpty() ||
             stageName == null || stageName.trim().isEmpty()) {
-            lastError = "All fields must be filled out!";
+
             return null;
         }
         
+        // Normalize username to lowercase for case-insensitive comparison
+        accountId = accountId.toLowerCase();
+        
         // Check if username already taken
         if (accounts.containsKey(accountId)) {
-            lastError = "Username '" + accountId + "' is already taken!";
             return null;
         }
 
@@ -100,6 +96,9 @@ public class AuthService {
             password == null || password.trim().isEmpty()) {
             return null;
         }
+        
+        // Normalize username to lowercase for case-insensitive comparison
+        accountId = accountId.toLowerCase();
         
         Account account = accounts.get(accountId);
         
@@ -144,12 +143,18 @@ public class AuthService {
             return listeners.get(session.getLinkedId());
         }
     }
-
+    
     /**
-     * Get the last error message from a failed operation
+     * Check if a username is available for registration
+     * @return true if username is available, false if already taken
      */
-    public String getLastError() {
-        return lastError;
+    public boolean isUsernameAvailable(String accountId) {
+        if (accountId == null || accountId.trim().isEmpty()) {
+            return false;
+        }
+        // Normalize username to lowercase for case-insensitive comparison
+        accountId = accountId.toLowerCase();
+        return !accounts.containsKey(accountId);
     }
     
     /**
@@ -158,6 +163,9 @@ public class AuthService {
      */
     public void addPreloadedArtist(String accountId, String password, String userId, 
                                    String displayName, String stageName) {
+        // Normalize username to lowercase for case-insensitive comparison
+        accountId = accountId.toLowerCase();
+        
         Artist artist = new Artist(userId, displayName, stageName);
         artists.put(userId, artist);
         
@@ -171,6 +179,9 @@ public class AuthService {
      */
     public void addPreloadedListener(String accountId, String password, String userId,
                                      String displayName) {
+        // Normalize username to lowercase for case-insensitive comparison
+        accountId = accountId.toLowerCase();
+        
         Listener listener = new Listener(userId, displayName);
         listeners.put(userId, listener);
         

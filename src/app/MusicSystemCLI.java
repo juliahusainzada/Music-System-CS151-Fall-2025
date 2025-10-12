@@ -131,33 +131,55 @@ public class MusicSystemCLI {
     // Case 1 - handleMainMenu
     private void registerArtist() {
         printHeader("Register as Artist");
-        String accountId = getStringInput("Username: ");
-        String password = getStringInput("Password: ");
-        String displayName = getStringInput("Display Name: ");
-        String stageName = getStringInput("Stage Name: ");   
+        
+        // Get username and check availability
+        String accountId;
+        while (true) {
+            accountId = getRequiredStringInput("Username: ");
+            if (auth.isUsernameAvailable(accountId)) {
+                break; // Username is available, proceed
+            }
+            printError("✗ Username '" + accountId + "' is already taken! Please choose a different username.");
+        }
+        
+        // Collect other required fields with automatic reprompting for empty values
+        String password = getRequiredStringInput("Password: ");
+        String displayName = getRequiredStringInput("Display Name: ");
+        String stageName = getRequiredStringInput("Stage Name: ");
         
         currentSession = auth.registerArtist(accountId, password, displayName, stageName);
 
         if (currentSession != null) {
             printSuccess("✓ Registration successful! Welcome, " + displayName + "!");
         } else {
-            printError("✗ Registration failed! " + auth.getLastError());
+            printError("✗ Registration failed!");
         }
     }
 
     // Case 2 - handleMainMenu
     private void registerListener() {
         printHeader("Register as Listener");
-        String accountId = getStringInput("Username: ");
-        String password = getStringInput("Password: ");
-        String displayName = getStringInput("Display Name: ");
+        
+        // Get username and check availability
+        String accountId;
+        while (true) {
+            accountId = getRequiredStringInput("Username: ");
+            if (auth.isUsernameAvailable(accountId)) {
+                break; // Username is available, proceed
+            }
+            printError("✗ Username '" + accountId + "' is already taken! Please choose a different username.");
+        }
+        
+        // Collect other required fields with automatic reprompting for empty values
+        String password = getRequiredStringInput("Password: ");
+        String displayName = getRequiredStringInput("Display Name: ");
         
         currentSession = auth.registerListener(accountId, password, displayName);
 
         if (currentSession != null) {
             printSuccess("✓ Registration successful! Welcome, " + displayName + "!");
         } else {
-            printError("✗ Registration failed! " + auth.getLastError());
+            printError("✗ Registration failed! ");
         }
     }
 
@@ -389,6 +411,18 @@ public class MusicSystemCLI {
     private String getStringInput(String prompt) {
         System.out.print(prompt);
         return scanner.nextLine().trim();
+    }
+    
+    // Helper function that validates input is not empty and reprompts if needed
+    private String getRequiredStringInput(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+            if (!input.isEmpty()) {
+                return input;
+            }
+            printError("This field cannot be empty! Please try again.");
+        }
     }
 
     // Helper function for UI handling
