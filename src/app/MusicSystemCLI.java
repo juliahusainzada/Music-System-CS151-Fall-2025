@@ -43,6 +43,7 @@ public class MusicSystemCLI {
      */
     public void run() {
         printHeader("🎵 WELCOME TO OUR MUSIC SYSTEM 🎵");
+        printInfo("🎵 You can enter 'q' at any time to exit the system. 🎵");
         System.out.println();
         boolean running = true;
 
@@ -186,15 +187,26 @@ public class MusicSystemCLI {
     // Case 3 - handleMainMenu
     private void login() {
         printHeader("Login");
-        String accountId = getStringInput("Username: ");
-        String password = getStringInput("Password: ");
+        
+        // Get username and verify it exists
+        String accountId;
+        while (true) {
+            accountId = getRequiredStringInput("Username: ");
+            // if username is NOT taken
+            if (!auth.isUsernameAvailable(accountId)) {
+                break; // Username exists, proceed to password
+            }
+            printError("✗ This username does not exist! Please try again.");
+        }
+        
+        String password = getRequiredStringInput("Password: ");
 
         currentSession = auth.login(accountId, password);
 
         if (currentSession != null) {
             printSuccess("✓ Login successful!");
         } else {
-            printError("✗ Invalid username or password!");
+            printError("✗ Invalid password!");
         }
     }
 
@@ -410,7 +422,12 @@ public class MusicSystemCLI {
     // Helper function for searching, saving, unsaving media
     private String getStringInput(String prompt) {
         System.out.print(prompt);
-        return scanner.nextLine().trim();
+        String input = scanner.nextLine().trim();
+        if (input.equalsIgnoreCase("q")) {
+            printInfo("\nThank you for using our music player!");
+            System.exit(0);
+        }
+        return input;
     }
     
     // Helper function that validates input is not empty and reprompts if needed
@@ -418,6 +435,10 @@ public class MusicSystemCLI {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
+            if (input.equalsIgnoreCase("q")) {
+                printInfo("\nThank you for using our music player!");
+                System.exit(0);
+            }
             if (!input.isEmpty()) {
                 return input;
             }
@@ -430,7 +451,12 @@ public class MusicSystemCLI {
         while (true) {
             try {
                 System.out.print(prompt);
-                int value = Integer.parseInt(scanner.nextLine().trim());
+                String input = scanner.nextLine().trim();
+                if (input.equalsIgnoreCase("q")) {
+                    printInfo("\nThank you for using our music player!");
+                    System.exit(0);
+                }
+                int value = Integer.parseInt(input);
                 return value;
             } catch (NumberFormatException e) {
                 printError("Please enter a valid number!");
