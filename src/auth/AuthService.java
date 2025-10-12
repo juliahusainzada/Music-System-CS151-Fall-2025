@@ -25,6 +25,13 @@ public class AuthService {
     private final Map<String, Artist> artists = new HashMap<>();
     
     public Session registerListener(String accountId, String password, String displayName) {
+        // Validate input - reject empty fields
+        if (accountId == null || accountId.trim().isEmpty() ||
+            password == null || password.trim().isEmpty() ||
+            displayName == null || displayName.trim().isEmpty()) {
+            return null;
+        }
+        
         // Check if username already taken
         if (accounts.containsKey(accountId)) {
             return null;
@@ -47,6 +54,14 @@ public class AuthService {
     }
 
     public Session registerArtist(String accountId, String password, String displayName, String stageName) {
+        // Validate input - reject empty fields
+        if (accountId == null || accountId.trim().isEmpty() ||
+            password == null || password.trim().isEmpty() ||
+            displayName == null || displayName.trim().isEmpty() ||
+            stageName == null || stageName.trim().isEmpty()) {
+            return null;
+        }
+        
         // Check if username already taken
         if (accounts.containsKey(accountId)) {
             return null;
@@ -69,6 +84,12 @@ public class AuthService {
     }
 
     public Session login(String accountId, String password) {
+        // Validate input - reject empty fields
+        if (accountId == null || accountId.trim().isEmpty() ||
+            password == null || password.trim().isEmpty()) {
+            return null;
+        }
+        
         Account account = accounts.get(accountId);
         
         // Check if account exists
