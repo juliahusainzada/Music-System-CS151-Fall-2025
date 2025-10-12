@@ -5,6 +5,7 @@ import domain.Song;
 import domain.MediaItem;
 import user.Artist;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,6 +25,17 @@ public class CatalogTest {
         // Add test data
         catalog.addItem(new Song("song_1", "Beautiful Day", 180, "artist_1", "Album", "Pop"));
         catalog.addItem(new Song("song_2", "Rainy Night", 200, "artist_2", "Album", "Jazz"));
+    }
+    
+    @AfterEach
+    void cleanUp() {
+        // Clean up test data by removing all items added during tests
+        // Get all item IDs that might exist from any test
+        String[] testItemIds = {"song_1", "song_2", "song_3", "song_4", "song_5", "test_song_1"};
+        
+        for (String itemId : testItemIds) {
+            catalog.removeItem(itemId);
+        }
     }
         
     @Test
