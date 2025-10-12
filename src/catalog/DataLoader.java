@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 
 import auth.AuthService;
 import domain.Song;
+import user.Artist;
 
 public class DataLoader {
     
@@ -45,7 +46,7 @@ public class DataLoader {
                 catalog.addItem(song);
                 
                 // Add song to artist's owned items
-                user.Artist artist = catalog.getArtist(ownerArtistId);
+                Artist artist = catalog.getArtist(ownerArtistId);
                 if (artist != null) {
                     artist.getOwnedItemIds().add(songId);
                 }

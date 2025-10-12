@@ -2,13 +2,10 @@ package user;
 import java.util.ArrayDeque;
 import java.util.List;
 
-import domain.Song;
-
-import domain.MediaItem;
-
-import catalog.Library;
-
 import catalog.Catalog;
+import catalog.Library;
+import domain.MediaItem;
+import domain.Song;
 
 public class Listener extends User {
     private final Library library;

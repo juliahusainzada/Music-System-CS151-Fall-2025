@@ -4,9 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import domain.Song;
-
 import catalog.Catalog;
+import domain.Song;
 
 public class Artist extends User {
     private String stageName;

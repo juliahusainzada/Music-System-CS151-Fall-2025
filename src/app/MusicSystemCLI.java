@@ -5,13 +5,12 @@ import java.util.Scanner;
 import auth.AuthService;
 import auth.Session;
 import catalog.Catalog;
+import catalog.DataLoader;
 import domain.MediaItem;
 import domain.Song;
 import user.Artist;
 import user.Listener;
 import user.Role;
-
-import catalog.DataLoader;
 
 public class MusicSystemCLI {
     private AuthService auth;
@@ -32,7 +31,7 @@ public class MusicSystemCLI {
         this.currentSession = null;
 
         // Load data from CSV files
-        String base = "catalog/data/";
+        String base = "src/catalog/data/";
         DataLoader.loadArtists(base + "artists.csv", auth);
         DataLoader.loadSongs(base + "songs.csv", catalog);
         DataLoader.loadListeners(base + "listeners.csv", auth);
