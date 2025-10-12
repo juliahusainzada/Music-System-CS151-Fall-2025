@@ -32,7 +32,7 @@ public class MusicSystemCLI {
         this.currentSession = null;
 
         // Load data from CSV files
-        String base = "src/catalog/data/";
+        String base = "catalog/data/";
         DataLoader.loadArtists(base + "artists.csv", auth);
         DataLoader.loadSongs(base + "songs.csv", catalog);
         DataLoader.loadListeners(base + "listeners.csv", auth);
