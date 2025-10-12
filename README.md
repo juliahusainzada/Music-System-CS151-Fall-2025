@@ -137,4 +137,4 @@ Together, we designed the overall architecture, high-level design, and project c
 |--------------|------------------------|
 | **Julia Husainzada** | Designed package structure; implemented `AuthService`, `Session`, and CLI flow; developed `Catalog` and `DataLoader` |
 | **Dushan Siriwardana** | Implemented `Library`, `Artist`, `Podcast` functionality; added playback features (`Play`, `Pause`, `Stop`); managed player state transitions with `PlayerState` enum |
-| **Houmei Li** | Impelemented `Searchable` interface, `User` abstract class |
+| **Houmei Li** | Implemented `Searchable` interface, `User` abstract class |
