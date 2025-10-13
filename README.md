@@ -24,6 +24,7 @@ We aim to have a clear separate of concerns across authentication, catalog, medi
     - `Catalog`: content of all MediaItems; add/list/get and search entry points
     - `Library`: per-listener collection of saved item IDs
     - `DataLoader`: Initializes clibrary/catalog information from files
+    - `data`: artists, listeners, song CSV files 
 - `domain`:
     - `MediaItem` (abstract): itemId, title, durationSec, common behavior
     - `Song`: concrete implmentation of `MediaItem`
@@ -37,6 +38,11 @@ We aim to have a clear separate of concerns across authentication, catalog, medi
 - `app`:
     - `MusicSystemCLI`: text UI, handles auth -> catalog/library -> playback flows
     - `ConsoleUI`: utility class providing ANSI color-coded console output (success, error, info, warning messages) and formatted input prompts to create a beautified and colorful user experience
+- `exceptions`:
+  - `InvalidCredentialsException`: Custom exception thrown when login fails due to invalid credentials
+  - `ItemNotFoundException`: Custom exception thrown when a requested item cant be found in the catalog
+- `config`:
+  - `Constants`: Enforces maximum number of instances (100) allowed for each class with `IllegalStateException`
 ### 2.3 Key Design Considerations
 - Our **single source of truth** allows all content to live in the Catalog. Library stores only item IDs (references)
 - We designed with **extensibility** in mind, making implementing new media types and adding more search capabilities easier
