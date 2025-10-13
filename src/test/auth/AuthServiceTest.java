@@ -2,6 +2,7 @@ package test.auth;
 
 import auth.AuthService;
 import auth.Session;
+import exceptions.InvalidCredentialsException;
 import user.Listener;
 import user.Artist;
 import user.Role;
@@ -63,7 +64,7 @@ public class AuthServiceTest {
     }
     
     @Test
-    void testLogin() {
+    void testLogin() throws InvalidCredentialsException {
         // Set up
         Session registrationSession = authService.registerListener("just_bob", "pass123", "Bob Best");
         Session loginSession = authService.login("just_bob", "pass123");
@@ -81,17 +82,28 @@ public class AuthServiceTest {
     @Test
     void testLoginWrongPassword() {
         // Set up
-        Session registrationSession = authService.registerListener("just_bob", "pass123", "Bob Best");
-        Session loginSession = authService.login("just_bob", "wrong_pass");
-
-        // Verify
-        assertNull(loginSession);
+        authService.registerListener("just_bob", "pass123", "Bob Best");
+        
+        // Verify - should throw InvalidCredentialsException
+        try {
+            Session loginSession = authService.login("just_bob", "wrong_pass");
+            fail("Expected InvalidCredentialsException to be thrown");
+        } catch (InvalidCredentialsException e) {
+            // Expected - test passes
+            assertTrue(e.getMessage().contains("Invalid"));
+        }
     }
     
     @Test
     void testLoginNonExistentAccount() {
-        Session loginSession = authService.login("just_bob", "pass123");
-        assertNull(loginSession);
+        // Verify - should throw InvalidCredentialsException
+        try {
+            Session loginSession = authService.login("just_bob", "pass123");
+            fail("Expected InvalidCredentialsException to be thrown");
+        } catch (InvalidCredentialsException e) {
+            // Expected - test passes
+            assertTrue(e.getMessage().contains("Invalid"));
+        }
     }
     
     @Test
@@ -119,7 +131,7 @@ public class AuthServiceTest {
     }
 
     @Test
-    void logoutLogin() {
+    void logoutLogin() throws InvalidCredentialsException {
         Session session = authService.registerListener("just_bob", "pass123", "Bob Best");
         boolean logoutResult = authService.logout(session.getSessionId());
         assertTrue(logoutResult);
@@ -154,7 +166,7 @@ public class AuthServiceTest {
     }
     
     @Test
-    void testAddPreloadedListener() {
+    void testAddPreloadedListener() throws InvalidCredentialsException {
         // Set up
         authService.addPreloadedListener(
             "csv_user",        
@@ -171,7 +183,7 @@ public class AuthServiceTest {
     }
     
     @Test
-    void testMultipleSessionsSameAccount() {
+    void testMultipleSessionsSameAccount() throws InvalidCredentialsException {
         // Set up
         Session session1 = authService.registerListener("bob", "pass", "Bob");
         Session session2 = authService.login("bob", "pass");

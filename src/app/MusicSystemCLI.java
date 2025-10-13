@@ -8,6 +8,8 @@ import catalog.Catalog;
 import catalog.DataLoader;
 import domain.MediaItem;
 import domain.Song;
+import exceptions.InvalidCredentialsException;
+import exceptions.ItemNotFoundException;
 import user.Artist;
 import user.Listener;
 import user.Role;
@@ -201,12 +203,12 @@ public class MusicSystemCLI {
         
         String password = getRequiredStringInput("Password: ");
 
-        currentSession = auth.login(accountId, password);
-
-        if (currentSession != null) {
+        try {
+            currentSession = auth.login(accountId, password);
             printSuccess("✓ Login successful!");
-        } else {
-            printError("✗ Invalid password!");
+        } catch (InvalidCredentialsException e) {
+            printError("✗ " + e.getMessage());
+            currentSession = null;
         }
     }
 
@@ -369,12 +371,11 @@ public class MusicSystemCLI {
     // Case 2 - handleListenerMenu
     private void saveSong(Listener listener) {
         String title = getStringInput("\nEnter song title to save: ");
-        String itemId = listener.saveByExactTitle(catalog, title);
-
-        if (itemId != null) {
+        try {
+            String itemId = listener.saveByExactTitle(catalog, title);
             printSuccess("✓ Song saved!");
-        } else {
-            printError("✗ Song not found!");
+        } catch (ItemNotFoundException e) {
+            printError("✗ " + e.getMessage());
         }
     }
 
@@ -384,11 +385,11 @@ public class MusicSystemCLI {
 
         String title = getStringInput("Enter song title to unsave: ");
 
-        String itemId = listener.unsaveByExactTitle(catalog, title);
-        if (itemId != null) {
+        try {
+            String itemId = listener.unsaveByExactTitle(catalog, title);
             printSuccess("✓ Song removed from your library!");
-        } else {
-            printError("✗ Song not found!");
+        } catch (ItemNotFoundException e) {
+            printError("✗ " + e.getMessage());
         }
     }
 
@@ -411,11 +412,11 @@ public class MusicSystemCLI {
     // Case 5 - handleListenerMenu
     private void playSong(Listener listener) {
         String title = getStringInput("\nEnter song title to play: ");
-        boolean success = listener.playByExactTitle(catalog, title);
-        if (success) {
+        try {
+            listener.playByExactTitle(catalog, title);
             printSuccess("▶ Playing: " + title);
-        } else {
-            printError("✗ Song not found!");
+        } catch (ItemNotFoundException e) {
+            printError("✗ " + e.getMessage());
         }
     }
 

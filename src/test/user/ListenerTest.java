@@ -3,6 +3,8 @@ package test.user;
 import user.Listener;
 import catalog.Catalog;
 import domain.Song;
+import exceptions.ItemNotFoundException;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,29 +43,42 @@ public class ListenerTest {
     }
     
     @Test
-    void testSaveByExactTitle() {
-        // Exact title
+    void testSaveByExactTitle() throws ItemNotFoundException {
+        // Exact title - should work
         String savedId = listener.saveByExactTitle(catalog, "Test Song");
         assertEquals("song_1", savedId);
         
-        // Title not in catalog
-        String notExisting = listener.saveByExactTitle(catalog, "Bla bla bla");
-        assertNull(notExisting);
+        // Title not in catalog - should throw exception
+        try {
+            listener.saveByExactTitle(catalog, "Bla bla bla");
+            fail("Expected ItemNotFoundException to be thrown");
+        } catch (ItemNotFoundException e) {
+            assertTrue(e.getMessage().contains("not found"));
+        }
 
-        // Partial Title
-        String partial = listener.saveByExactTitle(catalog, "Test");
-        assertNull(partial);
+        // Partial Title - should throw exception
+        try {
+            listener.saveByExactTitle(catalog, "Test");
+            fail("Expected ItemNotFoundException to be thrown");
+        } catch (ItemNotFoundException e) {
+            assertTrue(e.getMessage().contains("not found"));
+        }
     }
     
     @Test
-    void testUnsaveByExactTitle() {
+    void testUnsaveByExactTitle() throws ItemNotFoundException {
         String savedId = listener.saveByExactTitle(catalog, "Test Song");
         String unsaveId = listener.unsaveByExactTitle(catalog, "Test Song");
         
         assertEquals(unsaveId, "song_1");
 
-        String unsaveId2 = listener.unsaveByExactTitle(catalog, "Test");
-        assertNull(unsaveId2);
+        // Non-existent title - should throw exception
+        try {
+            listener.unsaveByExactTitle(catalog, "Test");
+            fail("Expected ItemNotFoundException to be thrown");
+        } catch (ItemNotFoundException e) {
+            assertTrue(e.getMessage().contains("not found"));
+        }
     }
     
     @Test
@@ -87,9 +102,8 @@ public class ListenerTest {
     }
     
     @Test
-    void testPlayByExactTitle() {
-        boolean success = listener.playByExactTitle(catalog, "Test Song");
-        assertTrue(success);
+    void testPlayByExactTitle() throws ItemNotFoundException {
+        listener.playByExactTitle(catalog, "Test Song");
         assertTrue(listener.isPlaying());
 
         Song currentSong = listener.getCurrentSong(catalog);
@@ -103,7 +117,18 @@ public class ListenerTest {
     }
     
     @Test
-    void testPause() {
+    void testPlayNonExistentSong() {
+        // Non-existent song - should throw exception
+        try {
+            listener.playByExactTitle(catalog, "Non Existent Song");
+            fail("Expected ItemNotFoundException to be thrown");
+        } catch (ItemNotFoundException e) {
+            assertTrue(e.getMessage().contains("not found"));
+        }
+    }
+    
+    @Test
+    void testPause() throws ItemNotFoundException {
         listener.playByExactTitle(catalog, "Test Song");
         listener.pause(catalog);
         
@@ -119,7 +144,7 @@ public class ListenerTest {
     }
     
     @Test
-    void testStop() {
+    void testStop() throws ItemNotFoundException {
         listener.playByExactTitle(catalog, "Test Song");
         listener.stop();
         
@@ -135,7 +160,7 @@ public class ListenerTest {
     }
     
     @Test
-    void testGetPlaybackInfo() {
+    void testGetPlaybackInfo() throws ItemNotFoundException {
         listener.playByExactTitle(catalog, "Test Song");
         String info = listener.getPlaybackInfo(catalog);
 

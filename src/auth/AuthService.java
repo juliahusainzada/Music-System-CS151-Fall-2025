@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import exceptions.InvalidCredentialsException;
 import user.Account;
 import user.Artist;
 import user.Listener;
@@ -90,11 +91,11 @@ public class AuthService {
         return session;
     }
 
-    public Session login(String accountId, String password) {
+    public Session login(String accountId, String password) throws InvalidCredentialsException {
         // Validate input - reject empty fields
         if (accountId == null || accountId.trim().isEmpty() ||
             password == null || password.trim().isEmpty()) {
-            return null;
+            throw new InvalidCredentialsException("Username and password cannot be empty");
         }
         
         // Normalize username to lowercase for case-insensitive comparison
@@ -104,12 +105,12 @@ public class AuthService {
         
         // Check if account exists
         if (account == null) {
-            return null; // acc doesnt exist
+            throw new InvalidCredentialsException("Invalid username or password");
         }
 
         // Verify password
         if (!account.getPassword().equals(password)) {
-            return null;
+            throw new InvalidCredentialsException("Invalid username or password");
         }
 
         // Create new session

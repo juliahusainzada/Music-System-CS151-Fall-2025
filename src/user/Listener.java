@@ -4,10 +4,14 @@ import java.util.List;
 
 import catalog.Catalog;
 import catalog.Library;
+import config.Constants;
 import domain.MediaItem;
 import domain.Song;
+import exceptions.ItemNotFoundException;
 
 public class Listener extends User {
+    private static int instanceCount = 0;
+    
     private final Library library;
 
     private String currentlyPlayingItemId;
@@ -15,6 +19,15 @@ public class Listener extends User {
 
     public Listener(String userId, String displayName) {
         super(userId, displayName);
+        
+        if (instanceCount >= Constants.MAXIMUM_INSTANCES) {
+            throw new IllegalStateException(
+                "Cannot create Listener: Maximum instance limit of " + 
+                Constants.MAXIMUM_INSTANCES + " reached"
+            );
+        }
+        instanceCount++;
+        
         this.library = new Library(userId);
     }
 
@@ -58,16 +71,20 @@ public class Listener extends User {
         return (s != null) && library.isSaved(s.getItemId());
     }
 
-    public String saveByExactTitle(Catalog catalog, String title) {
+    public String saveByExactTitle(Catalog catalog, String title) throws ItemNotFoundException {
         Song s = searchSongByTitle(catalog, title);
-        if (s == null) return null;
+        if (s == null) {
+            throw new ItemNotFoundException("Song", title);
+        }
         library.save(s.getItemId());
         return s.getItemId();
     }
 
-    public String unsaveByExactTitle(Catalog catalog, String title) {
+    public String unsaveByExactTitle(Catalog catalog, String title) throws ItemNotFoundException {
         Song s = searchSongByTitle(catalog, title);
-        if (s == null) return null;
+        if (s == null) {
+            throw new ItemNotFoundException("Song", title);
+        }
         library.unsave(s.getItemId());
         return s.getItemId();
     }
@@ -82,9 +99,11 @@ public class Listener extends User {
 
     // Moving to playing
 
-    public boolean playByExactTitle(Catalog catalog, String title) {
+    public boolean playByExactTitle(Catalog catalog, String title) throws ItemNotFoundException {
         Song s = searchSongByTitle(catalog, title);
-        if (s == null) return false;
+        if (s == null) {
+            throw new ItemNotFoundException("Song", title);
+        }
         Song current = getCurrentSong(catalog);
         this.currentlyPlayingItemId = s.getItemId();
 

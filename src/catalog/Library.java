@@ -4,6 +4,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import config.Constants;
 import domain.MediaItem;
 import domain.Song;
 
@@ -12,12 +13,22 @@ import domain.Song;
  * Tracks what Listener saved
  */
 public class Library {
+    private static int instanceCount = 0;
+    
     private final String ownerId;
     // Set: No duplicates
     // LinkedHashSet: Order is remembered in which added
     private final Set<String> savedItemIds = new LinkedHashSet<>();
 
     public Library(String ownerId) {
+        if (instanceCount >= Constants.MAXIMUM_INSTANCES) {
+            throw new IllegalStateException(
+                "Cannot create Library: Maximum instance limit of " + 
+                Constants.MAXIMUM_INSTANCES + " reached"
+            );
+        }
+        instanceCount++;
+        
         this.ownerId = ownerId;
     }
 
