@@ -5,9 +5,12 @@ import java.util.Set;
 import java.util.UUID;
 
 import catalog.Catalog;
+import config.Constants;
 import domain.Song;
 
 public class Artist extends User {
+    private static int instanceCount = 0;
+    
     private String stageName;
     private Set<String> ownedItemIds;
 
@@ -18,6 +21,15 @@ public class Artist extends User {
      */
     public Artist(String userId, String displayName, String stageName) {
         super(userId, displayName);
+        
+        if (instanceCount >= Constants.MAXIMUM_INSTANCES) {
+            throw new IllegalStateException(
+                "Cannot create Artist: Maximum instance limit of " + 
+                Constants.MAXIMUM_INSTANCES + " reached"
+            );
+        }
+        instanceCount++;
+        
         this.stageName = stageName;
         this.ownedItemIds = new HashSet<>();
 

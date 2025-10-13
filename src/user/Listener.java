@@ -4,10 +4,13 @@ import java.util.List;
 
 import catalog.Catalog;
 import catalog.Library;
+import config.Constants;
 import domain.MediaItem;
 import domain.Song;
 
 public class Listener extends User {
+    private static int instanceCount = 0;
+    
     private final Library library;
 
     private String currentlyPlayingItemId;
@@ -15,6 +18,15 @@ public class Listener extends User {
 
     public Listener(String userId, String displayName) {
         super(userId, displayName);
+        
+        if (instanceCount >= Constants.MAXIMUM_INSTANCES) {
+            throw new IllegalStateException(
+                "Cannot create Listener: Maximum instance limit of " + 
+                Constants.MAXIMUM_INSTANCES + " reached"
+            );
+        }
+        instanceCount++;
+        
         this.library = new Library(userId);
     }
 
