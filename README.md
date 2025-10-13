@@ -44,7 +44,7 @@ We aim to have a clear separate of concerns across authentication, catalog, medi
 - We intentionally decided on hashmaps and sets as we considered **performance**. We have a read-mostly catalog with simple indexing (such as in-memory mapping by itemId and title), and library operations are O(1) on item IDs
 
 ### 2.4 UML Diagram
-[INSERT HERE]
+![UML Diagram](images/Music-System%20UML%20class.png)
 
 ### 2.5 Error Handling and Edge Cases
 - **Authentication** (`AuthService.java`)
