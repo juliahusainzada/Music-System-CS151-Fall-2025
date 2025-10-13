@@ -1,4 +1,5 @@
 package app;
+import java.util.Scanner;
 
 /**
  * Text formatting and colors!
@@ -31,5 +32,22 @@ public class ConsoleUI {
     
     public static void printWarning(String message) {
         System.out.println(YELLOW + message + RESET);
+    }
+    public static String prompt(String message) {
+        System.out.print(CYAN + message + " > " + RESET);
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine().trim();
+    }
+
+    // Prompt user for a number input
+    public static int promptInt(String message) {
+        System.out.print(CYAN + message + " > " + RESET);
+        Scanner scanner = new Scanner(System.in);
+        while (!scanner.hasNextInt()) {
+            printError("Please enter a valid number!");
+            System.out.print(CYAN + message + " > " + RESET);
+            scanner.next();
+        }
+        return scanner.nextInt();
     }
 }
