@@ -41,4 +41,10 @@ public class Podcast extends MediaItem {
     public String displayInfo() {
         return getTitle() + " • " + getSeriesName() + " • " + getEpisodeNumber() + " • " + getDurationSec() + "s";
     }
+    
+    @Override
+    public String toString() {
+        return "Podcast{id='" + itemId + "', title='" + title + "', duration=" + durationSec + 
+               "s, host='" + host + "', series='" + seriesName + "', episode=" + episodeNumber + "}";
+    }
 }

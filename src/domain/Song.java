@@ -47,4 +47,10 @@ public class Song extends MediaItem {
     public String displayInfo() {
         return getTitle() + " • " + album + " • " + genre + " • " + getDurationSec() + "s";
     }
+    
+    @Override
+    public String toString() {
+        return "Song{id='" + itemId + "', title='" + title + "', duration=" + durationSec + 
+               "s, artist='" + ownerArtistID + "', album='" + album + "', genre='" + genre + "'}";
+    }
 }

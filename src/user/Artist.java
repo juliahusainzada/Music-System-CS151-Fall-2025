@@ -75,4 +75,10 @@ public class Artist extends User {
             ownedItemIds.remove(itemId);
         }
     }
+    
+    @Override
+    public String toString() {
+        return "Artist{userId='" + userId + "', displayName='" + displayName + 
+               "', stageName='" + stageName + "', songsPublished=" + ownedItemIds.size() + "}";
+    }
 }
