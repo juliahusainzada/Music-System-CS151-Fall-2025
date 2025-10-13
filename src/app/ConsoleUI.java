@@ -50,4 +50,5 @@ public class ConsoleUI {
         }
         return scanner.nextInt();
     }
+
 }
