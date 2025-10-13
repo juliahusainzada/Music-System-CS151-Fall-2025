@@ -46,32 +46,11 @@ We aim to have a clear separate of concerns across authentication, catalog, medi
 ### 2.4 UML Diagram
 ![UML Diagram](images/Music-System%20UML%20class.png)
 
-### 2.5 Error Handling and Edge Cases
-- **Authentication** (`AuthService.java`)
-Prevents duplicate account creation and invalid logins by returning null for existing usernames or incorrect credentials, without revealing sensitive details. Sessions are validated for existence and activity before allowing operations.
-- **Search and Content** (`Listener.java`, `MediaItem.java`)
-Handles null or empty queries and returns null when a requested song doesn’t exist in the catalog.
-- **Playback State Management** (`Listener.java`)
-Blocks invalid operations, such as pausing when no song is playing.
-- **User Input Validation** (`MusicSystemCLI.java`)
-Catches invalid numeric input and handles empty search results.
-  ```java
-  try {
-      int value = Integer.parseInt(scanner.nextLine().trim());
-      return value;
-  } catch (NumberFormatException e) {
-      System.out.println("Please enter a valid number!");
-  }
-  ```
-- **File I/O** (`DataLoader.java`)
-Catches and reports file-loading errors (e.g., IOException) during CSV reads.
-  ```java
-  } catch (IOException e) {
-      System.out.println("Error loading artists: " + e.getMessage());
-  }
-  ```
-- **Catalog Operations** (`Catalog.java`)
-Validates item removals, returning false if the item doesn’t exist in the catalog.
+### 2.5 Exception Handling
+1. **NumberFormatException** - Catches invalid number input (built-in)
+2. **InvalidCredentialsException** - Catches login failures (custom)
+3. **ItemNotFoundException** - Catches missing songs (custom)
+4. **File I/O** (`DataLoader.java`) - Catches file-loading errors (e.g., IOException) during CSV reads
 
 ### 2.6 Future Work
 - Current file-based persistence via DataLoader keeps setup simple but isn’t realistic for account creation. A future improvement would be migrating to a database to support live updates
