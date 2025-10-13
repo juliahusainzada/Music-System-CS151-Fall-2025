@@ -43,6 +43,8 @@ We aim to have a clear separate of concerns across authentication, catalog, medi
   - `ItemNotFoundException`: Custom exception thrown when a requested item cant be found in the catalog
 - `config`:
   - `Constants`: Enforces maximum number of instances (100) allowed for each class with `IllegalStateException`
+- `test`:
+  - Includes unit test coverage across each package
 ### 2.3 Key Design Considerations
 - Our **single source of truth** allows all content to live in the Catalog. Library stores only item IDs (references)
 - We designed with **extensibility** in mind, making implementing new media types and adding more search capabilities easier
