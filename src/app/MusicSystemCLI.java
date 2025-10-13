@@ -45,7 +45,7 @@ public class MusicSystemCLI {
      */
     public void run() {
         printHeader("🎵 WELCOME TO OUR MUSIC SYSTEM 🎵");
-        printInfo("🎵 You can enter 'q' at any time to exit the system. 🎵");
+        printInfo("🎵 You can enter 'EXIT' at any time to exit the system. 🎵");
         System.out.println();
         boolean running = true;
 
@@ -424,7 +424,7 @@ public class MusicSystemCLI {
     private String getStringInput(String prompt) {
         System.out.print(prompt);
         String input = scanner.nextLine().trim();
-        if (input.equalsIgnoreCase("q")) {
+        if (input.equalsIgnoreCase("exit")) {
             printInfo("\nThank you for using our music player!");
             System.exit(0);
         }
@@ -436,7 +436,7 @@ public class MusicSystemCLI {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
-            if (input.equalsIgnoreCase("q")) {
+            if (input.equalsIgnoreCase("exit")) {
                 printInfo("\nThank you for using our music player!");
                 System.exit(0);
             }
@@ -453,7 +453,7 @@ public class MusicSystemCLI {
             try {
                 System.out.print(prompt);
                 String input = scanner.nextLine().trim();
-                if (input.equalsIgnoreCase("q")) {
+                if (input.equalsIgnoreCase("exit")) {
                     printInfo("\nThank you for using our music player!");
                     System.exit(0);
                 }
