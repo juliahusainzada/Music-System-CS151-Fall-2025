@@ -1,3 +1,5 @@
+package domain;
+
 public class Podcast extends MediaItem {
     private String host;
     private String seriesName;
@@ -23,27 +25,7 @@ public class Podcast extends MediaItem {
     }
 
     @Override
-    public void play() {
-        System.out.println("🎙️ Playing podcast: " + title + " (Episode " + episodeNumber + ") hosted by " + host);
-    }
-
-    @Override
-    public void pause() {
-        System.out.println("⏸️ Podcast paused: " + title);
-    }
-
-    @Override
-    public void stop() {
-        System.out.println("⏹️ Podcast stopped: " + title);
-    }
-
-    @Override
-    public void saveForLater(User user) {
-        System.out.println("💾 Podcast '" + title + "' saved for user: " + user.getDisplayName());
-    }
-
-    @Override
-    public void unsave(User user) {
-        System.out.println("🗑️ Podcast '" + title + "' unsaved for user: " + user.getDisplayName());
+    public String displayInfo() {
+        return getTitle() + " • " + getSeriesName() + " • " + getEpisodeNumber() + " • " + getDurationSec() + "s";
     }
 }
