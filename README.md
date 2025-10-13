@@ -36,6 +36,7 @@ We aim to have a clear separate of concerns across authentication, catalog, medi
     - `Role`: ARTIST, LISTENER for authorization checks in CLI
 - `app`:
     - `MusicSystemCLI`: text UI, handles auth -> catalog/library -> playback flows
+    - `ConsoleUI`: utility class providing ANSI color-coded console output (success, error, info, warning messages) and formatted input prompts to create a beautified and colorful user experience
 ### 2.3 Key Design Considerations
 - Our **single source of truth** allows all content to live in the Catalog. Library stores only item IDs (references)
 - We designed with **extensibility** in mind, making implementing new media types and adding more search capabilities easier
