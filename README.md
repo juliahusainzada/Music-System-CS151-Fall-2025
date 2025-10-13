@@ -115,6 +115,6 @@ Together, we designed the overall architecture, high-level design, and project c
 
 | Team Member | Areas of Contribution |
 |--------------|------------------------|
-| **Julia Husainzada** | Designed package structure; implemented `AuthService`, `Session`, and CLI flow; developed `Catalog` and `DataLoader` |
-| **Dushan Siriwardana** | Implemented `Library`, `Artist`, `Podcast` functionality; added playback features (`Play`, `Pause`, `Stop`); managed player state transitions with `PlayerState` enum |
+| **Julia Husainzada** | Designed package structure; implemented `AuthService`, `Session`, `DataLoader`, `Catalog`, `Constants`, exceptions, unit tests for 7 classes, ReadMe, and CLI flow (`ConsoleUI`, `MusicSystemCLI`) |
+| **Dushan Siriwardana** | Developed UML diagram; Implemented `Library`, `Artist`, `Podcast` functionality; added playback features (`Play`, `Pause`, `Stop`); managed player state transitions with `PlayerState` enum; Arist unit test |
 | **Houmei Li** | Implemented `Searchable` interface, `User` abstract class |
