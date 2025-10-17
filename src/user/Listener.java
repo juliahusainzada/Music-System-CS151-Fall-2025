@@ -231,4 +231,10 @@ public class Listener extends User {
             playerState.name()
         );
     }
+    
+    // toString method for listener
+    @Override
+    public String toString() {
+        return "Listener{id='" + getUserId() + "', displayName='" + getDisplayName() +  "'}";
+    }
 }
